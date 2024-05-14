@@ -84,4 +84,118 @@ corridors.forEach((corridor) => {
 
 
 
+//Pathnodes for Mark
 
+let pathNodes = [
+    {
+        number: 0,
+        location: [553, 328],
+        properties: ['leasing office']
+    },
+    {
+        number: 1,
+        location: [535, 327],
+        properties: ["amenities"]
+    },
+    {
+        number: 2,
+        location: [535, 357],
+        properties: ["amenities"]
+    },
+    {
+        number: 3,
+        location: [535, 380],
+        properties: ["apartment 1224", "apartment 1224"]
+    },
+    {
+        number: 4,
+        location: [535, 404],
+        properties: ["apartment 1226", "apartment 1227"]
+    },
+    {
+        number: 5,
+        location: [535, 435],
+        properties: ["T cross"]
+    },
+    {
+        number: 6,
+        location: [593, 435],
+        properties: ["apartment 1405"]
+    },
+    {
+        number: 7,
+        location: [480, 435],
+        properties: ["apartment 1411"]
+    },
+    {
+        number: 8,
+        location: [443, 435],
+        properties: ["apartment 1413"]
+    },
+    {
+        number: 9,
+        location: [413, 435],
+        properties: ["apartment 1415"]
+    },
+    {
+        number: 10,
+        location: [535, 256],
+        properties: ["apartment 1214"]
+    },
+    {
+        number: 11,
+        location: [535, 228],
+        properties: ["T cross", "apartment 1212"]
+    },
+    {
+        number: 12,
+        location: [509, 228],
+        properties: ["apartment 1301", "apartment 1302"]
+    },
+    {
+        number: 13,
+        location: [483, 228],
+        properties: ["apartment 1303", "apartment 1304"]
+    },
+    {
+        number: 14,
+        location: [450, 228],
+        properties: ["apartment 1305", "apartment 1306"]
+    },
+    {
+        number: 15,
+        location: [420, 228],
+        properties: ["apartment 1307", "apartment 1308"]
+    },
+];
+
+let path = [
+    [
+        {
+            number: 0,
+            location: [553, 328],
+            properties: ['leasing office']
+        },
+        {
+            number: 1,
+            location: [535, 327],
+            properties: ["amenities"]
+        },
+        2  
+    ],
+    [
+        {
+            number: 1,
+            location: [535, 327],
+            properties: ["amenities"]
+        },
+        {
+            number: 2,
+            location: [535, 357],
+            properties: ["amenities"]
+        },
+        2
+          
+    ],
+    
+]
