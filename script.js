@@ -86,7 +86,7 @@ corridors.forEach((corridor) => {
 
 //Pathnodes for Mark
 
-let pathNodes = [
+let pathPoints = [
     {
         number: 0,
         location: [553, 328],
@@ -167,35 +167,47 @@ let pathNodes = [
         location: [420, 228],
         properties: ["apartment 1307", "apartment 1308"]
     },
+    {
+        number: 16,
+        location: [535, 200],
+        properties: ["apartment 1209", "apartment 1210"]
+    },    
 ];
 
 let path = [
-    [
-        {
-            number: 0,
-            location: [553, 328],
-            properties: ['leasing office']
-        },
-        {
-            number: 1,
-            location: [535, 327],
-            properties: ["amenities"]
-        },
-        2  
-    ],
-    [
-        {
-            number: 1,
-            location: [535, 327],
-            properties: ["amenities"]
-        },
-        {
-            number: 2,
-            location: [535, 357],
-            properties: ["amenities"]
-        },
-        2
-          
-    ],
-    
-]
+    [pathPoints[0], pathPoints[1], 1],
+    [pathPoints[1],pathPoints[2], 3],
+    [pathPoints[2],pathPoints[3], 1],
+    [pathPoints[3],pathPoints[4], 1],
+    [pathPoints[4],pathPoints[5], 2],
+    [pathPoints[4],pathPoints[6], 2],
+    [pathPoints[6],pathPoints[7], 1],
+    [pathPoints[7],pathPoints[8], 1],
+    [pathPoints[1],pathPoints[9], 4],
+    [pathPoints[9],pathPoints[10], 1],
+    [pathPoints[10],pathPoints[11], 1],
+    [pathPoints[11],pathPoints[12], 1],
+    [pathPoints[12],pathPoints[13], 1],
+    [pathPoints[13],pathPoints[14], 1],
+    [pathPoints[14],pathPoints[15], 1],
+    [pathPoints[10],pathPoints[16], 1],
+];
+
+let pathShrt = [
+    [0, 1, 1],
+    [1, 2, 3],
+    [2, 3, 1],
+    [3, 4, 1],
+    [4, 5, 2],
+    [4, 6, 2],
+    [6, 7, 1],
+    [7, 8, 1],
+    [1, 9, 4],
+    [9, 10, 1],
+    [10 ,11, 1],
+    [11 ,12, 1],
+    [12 ,13, 1],
+    [13 ,14, 1],
+    [14 ,15, 1],
+    [10 ,16, 1],
+];
