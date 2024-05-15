@@ -84,7 +84,7 @@ corridors.forEach((corridor) => {
 
 
 
-//Pathnodes for Mark
+//----------------- Dummy Pathnodes ----------------
 
 let pathPoints = [
     {
@@ -211,3 +211,19 @@ let pathShrt = [
     [13 ,14, 1],
     [14 ,15, 1],
 ];
+
+let dummyResponse = [6,5,4,3,2,1,10,11,12]; //---- Simmulated API response---
+
+function wayFinder(wayPoints) {
+    let resPoints = [];
+    for (let point of wayPoints) {
+        resPoints.push(pathPoints[point].location);
+    };
+    L.marker(resPoints[0]).addTo(map).bindPopup('Start: ' + pathPoints[dummyResponse[0]].properties);
+    L.marker(resPoints[resPoints.length - 1])
+    .addTo(map)
+    .bindPopup('Finish: ' + pathPoints[dummyResponse[dummyResponse.length - 1]].properties);
+    L.polyline(resPoints, {color: 'red', weight: 4}).addTo(map);
+};
+
+wayFinder(dummyResponse);
