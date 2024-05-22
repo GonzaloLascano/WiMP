@@ -246,8 +246,6 @@ function verbalDirections(wayPoints) {
     let directions = ["Start walking down the hallway ",]
     for (let point in wayPoints) {
         if (pathPoints[wayPoints[point]].type == 'directional') {
-            console.log(point++);
-            console.log(pathPoints[wayPoints[point]]);
             let verbDirection = 'Take a turn towards ' + pathPoints[wayPoints[point++]].properties[0] + " and continue.";
             directions.push(verbDirection);
         }
