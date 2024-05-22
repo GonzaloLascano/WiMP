@@ -84,91 +84,108 @@ corridors.forEach((corridor) => {
 
 
 
-//----------------- Dummy Pathnodes ----------------
+//----------------- Dummy Pathnodes for a* ----------------
 
 let pathPoints = [
     {
         number: 0,
+        type: "directional",
         location: [553, 328],
         properties: ['leasing office']
     },
     {
         number: 1,
+        type: "unit",
         location: [535, 327],
         properties: ["amenities"]
     },
     {
         number: 2,
+        type: "unit",
         location: [535, 357],
         properties: ["amenities"]
     },
     {
         number: 3,
+        type: "unit",
         location: [535, 380],
         properties: ["apartment 1224", "apartment 1224"]
     },
     {
         number: 4,
+        type: "unit",
         location: [535, 404],
         properties: ["apartment 1226", "apartment 1227"]
     },
     {
         number: 5,
+        type: "directional",
         location: [535, 435],
         properties: ["T cross"]
     },
     {
         number: 6,
+        type: "unit",
         location: [593, 435],
         properties: ["apartment 1405"]
     },
     {
         number: 7,
+        type: "unit",
         location: [480, 435],
         properties: ["apartment 1411"]
     },
     {
         number: 8,
+        type: "unit",
         location: [443, 435],
         properties: ["apartment 1413"]
     },
     {
         number: 9,
+        type: "unit",
         location: [413, 435],
         properties: ["apartment 1415"]
     },
     {
         number: 10,
+        type: "unit",
         location: [535, 256],
         properties: ["apartment 1214"]
     },
     {
         number: 11,
+        type: "directional",
         location: [535, 228],
         properties: ["T cross", "apartment 1212"]
     },
     {
         number: 12,
+        type: "unit",
         location: [509, 228],
         properties: ["apartment 1301", "apartment 1302"]
     },
     {
         number: 13,
+        type: "unit",
         location: [483, 228],
         properties: ["apartment 1303", "apartment 1304"]
     },
     {
         number: 14,
+        type: "unit",
         location: [450, 228],
         properties: ["apartment 1305", "apartment 1306"]
     },
     {
         number: 15,
+        type: "unit",
         location: [420, 228],
         properties: ["apartment 1307", "apartment 1308"]
     },
     {
         number: 16,
+        type: "unit",
         location: [535, 200],
         properties: ["apartment 1209", "apartment 1210"]
     },    
@@ -225,5 +242,19 @@ function wayFinder(wayPoints) {
     .bindPopup('Finish: ' + pathPoints[dummyResponse[dummyResponse.length - 1]].properties);
     L.polyline(resPoints, {color: 'red', weight: 4}).addTo(map);
 };
+function verbalDirections(wayPoints) {
+    let directions = ["Start walking down the hallway ",]
+    for (let point in wayPoints) {
+        if (pathPoints[wayPoints[point]].type == 'directional') {
+            console.log(point++);
+            console.log(pathPoints[wayPoints[point]]);
+            let verbDirection = 'Take a turn towards ' + pathPoints[wayPoints[point++]].properties[0] + " and continue.";
+            directions.push(verbDirection);
+        }
+    }
+    directions.push("Your destination," + " is down this hallway.")
+    console.log(directions);
+}
 
 wayFinder(dummyResponse);
+verbalDirections(dummyResponse);
