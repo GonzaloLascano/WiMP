@@ -243,10 +243,11 @@ function wayFinder(wayPoints) {
     L.polyline(resPoints, {color: 'red', weight: 4}).addTo(map);
 };
 function verbalDirections(wayPoints) {
-    let directions = ["Start walking down the hallway ",]
+    let directions = ["Start walking down the hallway. ",]
     for (let point in wayPoints) {
         if (pathPoints[wayPoints[point]].type == 'directional') {
-            let verbDirection = 'Take a turn towards ' + pathPoints[wayPoints[point++]].properties[0] + " and continue.";
+            let nextPoint = wayPoints[parseInt(point) + 1];
+            let verbDirection = 'At the ' + pathPoints[wayPoints[point]].properties[0] + ', take a turn towards ' + pathPoints[nextPoint].properties[0] + " and continue forward.";
             directions.push(verbDirection);
         }
     }
