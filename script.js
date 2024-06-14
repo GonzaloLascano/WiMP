@@ -231,6 +231,8 @@ let pathShrt = [
 
 let dummyResponse = [6,5,4,3,2,1,10,11,12]; //---- Simmulated API response---
 
+// Map Drawing Functions------------------------
+
 function wayFinder(wayPoints) {
     let resPoints = [];
     for (let point of wayPoints) {
@@ -242,12 +244,67 @@ function wayFinder(wayPoints) {
     .bindPopup('Finish: ' + pathPoints[dummyResponse[dummyResponse.length - 1]].properties);
     L.polyline(resPoints, {color: 'red', weight: 4}).addTo(map);
 };
+
+// Verbal instructions Functions--------------------
+
+function turnDirection(prevCoords, currentCoords, nextCoords) {
+    let turn;
+
+    function axisCheck(firstCoords, secondCoords){
+        let movingAxis = {};
+        if (firstCoords[0] !== secondCoords[0]) {
+            movingAxis.axis = 0; 
+          } else if (firstCoords[1] !== secondCoords[1]) {
+            movingAxis.axis = 1; 
+        }
+        
+        if (firstCoords[movingAxis.axis] > secondCoords[movingAxis.axis]) {
+            movingAxis.direction = '-'
+        } else {
+            movingAxis.direction = '+'
+        }
+        return movingAxis
+    }
+    
+    let currentAxis = axisCheck(prevCoords, currentCoords);
+    let newAxis = axisCheck(currentCoords, nextCoords);
+
+    if (currentAxis.axis === newAxis.axis) {
+        turn = "straight"
+    } else {
+        let turnOptions = {};
+        if(currentAxis.axis == 0) {
+            turnOptions = {
+                "--": "right",
+                "+-": "left",
+                "-+": "left",
+                "++": "right",    
+            }
+        } else if (currentAxis.axis == 1) {
+            turnOptions = {
+                "--": "left",
+                "+-": "right",
+                "-+": "right",
+                "++": "left",    
+            }
+        }
+        let turnKey = currentAxis.direction + newAxis.direction;
+        turn = turnOptions[turnKey];
+    }
+    return turn;
+}
+
 function verbalDirections(wayPoints) {
     let directions = ["Start walking down the hallway. Towards " + pathPoints[wayPoints[1]].properties[0]];
     for (let point in wayPoints) {
         if (pathPoints[wayPoints[point]].type == 'directional') {
-            let nextPoint = wayPoints[parseInt(point) + 1];
-            let verbDirection = 'At the ' + pathPoints[wayPoints[point]].properties[0] + ', take a turn towards ' + pathPoints[nextPoint].properties[0] + " and continue forward.";
+            let prevPoint = pathPoints[wayPoints[parseInt(point) - 1]];
+            let currentPoint = pathPoints[wayPoints[parseInt(point)]];
+            let nextPoint = pathPoints[wayPoints[parseInt(point) + 1]];
+
+            let turnD = turnDirection(prevPoint.location,currentPoint.location,nextPoint.location);
+
+            let verbDirection = 'At the ' + pathPoints[wayPoints[point]].properties[0] + ', go ' + turnD + ' towards ' + nextPoint.properties[0] + " and continue forward.";
             directions.push(verbDirection);
         }
     }
