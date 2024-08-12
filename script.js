@@ -233,6 +233,14 @@ let dummyResponse = [6,5,4,3,2,1,10,11,12]; //---- Simmulated API response---
 
 // Map Drawing Functions------------------------
 
+//user location
+let userLocator = L.marker(pathPoints[dummyResponse[0]].location).addTo(map).bindPopup('You are Here!').openPopup();
+userLocator._icon.className += " red-hue"; 
+
+userLocator.setLatLng(pathPoints[dummyResponse[1]].location);
+console.log(userLocator);
+//-------------
+
 function wayFinder(wayPoints) {
     let resPoints = [];
     for (let point of wayPoints) {
