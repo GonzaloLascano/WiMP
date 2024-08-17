@@ -13,6 +13,18 @@ map.on('click', (e) => {
     console.log(e.latlng);
 })
 
+//Map Controls
+let prevNextCtrls = L.control({position: 'topright'});
+prevNextCtrls.onAdd = function(map) {
+    let div = L.DomUtil.create('div', 'floor-switcher');
+    div.innerHTML = `
+        <button onclick="switchFloor(1)"> BACK </button>
+        <button onclick="switchFloor(2)"> NEXT </button>
+    `;
+    return div;
+};
+prevNextCtrls.addTo(map);
+
 //Floor features
 
 let leasingOffice = {unit:"Leasing Office", location:[553, 328]};
@@ -230,21 +242,27 @@ let pathShrt = [
 ];
 
 let dummyResponse = [6,5,4,3,2,1,10,11,12]; //---- Simmulated API response---
+//instead of an array with the numbers of nodes the path goes through, the backend could already respond with the array of
+//key directional entire nodes and their properties 
+let cleanResponse = [pathPoints[dummyResponse[0]]];
 
+for (let point in dummyResponse) {
+    if (pathPoints[dummyResponse[point]].type == 'directional' || point == dummyResponse.length - 1) {
+
+        cleanResponse.push(pathPoints[dummyResponse[point]]);
+    }
+}
 // Map Drawing Functions------------------------
 
-//user location
+//User location
 let userLocator = L.marker(pathPoints[dummyResponse[0]].location).addTo(map).bindPopup('You are Here!').openPopup();
 userLocator._icon.className += " red-hue"; 
 
-userLocator.setLatLng(pathPoints[dummyResponse[1]].location);
-console.log(userLocator);
-//-------------
-
+//Building Path drawing
 function wayFinder(wayPoints) {
     let resPoints = [];
     for (let point of wayPoints) {
-        resPoints.push(pathPoints[point].location);
+        resPoints.push(point.location);
     };
     L.marker(resPoints[0]).addTo(map).bindPopup('Start: ' + pathPoints[dummyResponse[0]].properties);
     L.marker(resPoints[resPoints.length - 1])
@@ -253,8 +271,14 @@ function wayFinder(wayPoints) {
     L.polyline(resPoints, {color: 'red', weight: 4}).addTo(map);
 };
 
-// Verbal instructions Functions--------------------
+// Utilitary functions: functions that might be useful for many pruposes -------------------------------
+//make an array that only takes the "Directional" nodes in the response
 
+
+
+// Verbal instructions Functions ----------------------
+
+//Turn
 function turnDirection(prevCoords, currentCoords, nextCoords) {
     let turn;
 
@@ -301,24 +325,30 @@ function turnDirection(prevCoords, currentCoords, nextCoords) {
     }
     return turn;
 }
+//Towards: make a function that returns "up" or "down" by comparing starting node with closest "unit" one in the direction we are headed
 
 function verbalDirections(wayPoints) {
-    let directions = ["Start walking down the hallway. Towards " + pathPoints[wayPoints[1]].properties[0]];
+    let directions = ["Start walking down the hallway. Towards " + wayPoints[1].properties[0]];
+    cleanResponse[0].instructions = directions[0];
     for (let point in wayPoints) {
-        if (pathPoints[wayPoints[point]].type == 'directional') {
-            let prevPoint = pathPoints[wayPoints[parseInt(point) - 1]];
-            let currentPoint = pathPoints[wayPoints[parseInt(point)]];
-            let nextPoint = pathPoints[wayPoints[parseInt(point) + 1]];
+        if (wayPoints[point].type == "directional") {
+            let prevPoint = wayPoints[parseInt(point) - 1];
+            let currentPoint = wayPoints[parseInt(point)];
+            let nextPoint = wayPoints[parseInt(point) + 1];
 
             let turnD = turnDirection(prevPoint.location,currentPoint.location,nextPoint.location);
 
-            let verbDirection = 'At the ' + pathPoints[wayPoints[point]].properties[0] + ', go ' + turnD + ' towards ' + nextPoint.properties[0] + " and continue forward.";
+            let verbDirection = 'At the ' + wayPoints[point].properties[0] + ', go ' + turnD + ' towards ' + nextPoint.properties[0] + " and continue forward.";
+
+            cleanResponse[point].instruction = verbDirection;
             directions.push(verbDirection);
         }
     }
-    directions.push("Your destination," + " is down this hallway.")
-    console.log(directions);
+    cleanResponse[cleanResponse.length-1].instructions = "Your destination, is down this hallway!"
+    directions.push("Your destination, is down this hallway!")
+    return directions
 }
 
-wayFinder(dummyResponse);
-verbalDirections(dummyResponse);
+console.log(cleanResponse);
+wayFinder(cleanResponse);
+verbalDirections(cleanResponse);
