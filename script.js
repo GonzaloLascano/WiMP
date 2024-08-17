@@ -18,12 +18,14 @@ let prevNextCtrls = L.control({position: 'topright'});
 prevNextCtrls.onAdd = function(map) {
     let div = L.DomUtil.create('div', 'floor-switcher');
     div.innerHTML = `
-        <button onclick="switchFloor(1)"> BACK </button>
-        <button onclick="switchFloor(2)"> NEXT </button>
+        <button onclick="stepNavigator(-1)"> BACK </button>
+        <button onclick="stepNavigator(+1)"> NEXT </button>
     `;
     return div;
 };
 prevNextCtrls.addTo(map);
+
+let navIndex = 0;
 
 //Floor features
 
@@ -254,7 +256,7 @@ for (let point in dummyResponse) {
 }
 // Map Drawing Functions------------------------
 
-//User location
+//User locator
 let userLocator = L.marker(pathPoints[dummyResponse[0]].location).addTo(map).bindPopup('You are Here!').openPopup();
 userLocator._icon.className += " red-hue"; 
 
@@ -274,7 +276,14 @@ function wayFinder(wayPoints) {
 // Utilitary functions: functions that might be useful for many pruposes -------------------------------
 //make an array that only takes the "Directional" nodes in the response
 
-
+//Navigation functions: ------------------------------------------------------
+function stepNavigator(prevOrNext) {
+    navIndex = navIndex + prevOrNext;
+    console.log('prevornext is ' + prevOrNext + "and navIndex is" + navIndex);
+    navIndex = (navIndex < 0 || navIndex > cleanResponse.length - 1) ? 0 : navIndex;
+    userLocator.setLatLng(cleanResponse[navIndex].location);
+    console.log(cleanResponse[navIndex].instruction);
+} 
 
 // Verbal instructions Functions ----------------------
 
@@ -329,7 +338,7 @@ function turnDirection(prevCoords, currentCoords, nextCoords) {
 
 function verbalDirections(wayPoints) {
     let directions = ["Start walking down the hallway. Towards " + wayPoints[1].properties[0]];
-    cleanResponse[0].instructions = directions[0];
+    cleanResponse[0].instruction = directions[0];
     for (let point in wayPoints) {
         if (wayPoints[point].type == "directional") {
             let prevPoint = wayPoints[parseInt(point) - 1];
@@ -344,11 +353,11 @@ function verbalDirections(wayPoints) {
             directions.push(verbDirection);
         }
     }
-    cleanResponse[cleanResponse.length-1].instructions = "Your destination, is down this hallway!"
+    cleanResponse[cleanResponse.length-1].instruction = "Your destination, is down this hallway!"
     directions.push("Your destination, is down this hallway!")
     return directions
 }
 
-console.log(cleanResponse);
 wayFinder(cleanResponse);
 verbalDirections(cleanResponse);
+console.log(cleanResponse[0].instruction);
